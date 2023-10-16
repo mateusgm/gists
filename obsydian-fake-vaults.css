@@ -1,0 +1,70 @@
+
+
+/** vault **/
+
+.nav-folder.mod-root >
+.nav-folder-title {
+	display: none;
+}
+
+.nav-folder.mod-root > 
+.nav-folder-children >
+.tree-item >
+.tree-item-self {
+	margin-top: 16px;
+} 
+
+
+/** parent folders **/
+
+.nav-folder.mod-root > 
+.nav-folder-children > 
+.nav-folder > 
+.nav-folder-title {
+	font-weight: var(--vault-name-font-weight);
+	color: var(--vault-name-color);
+	font-size: var(--vault-name-font-size);
+}
+
+.nav-folder.mod-root > 
+.nav-folder-children >
+.nav-folder >
+.nav-folder-title
+.nav-folder-collapse-indicator { 
+	display: none;
+}
+
+
+
+/** nested folders **/
+
+.nav-folder.mod-root > 
+.nav-folder-children >
+.nav-folder > 
+.nav-folder-children {
+	border-left: none;
+	margin-left: 6px;
+}
+
+.nav-folder.mod-root > 
+.nav-folder-children
+.nav-folder
+.nav-folder-children {
+	padding-left: 10px;
+
+}
+
+.nav-folder.mod-root > 
+.nav-folder-children >
+.nav-folder
+.nav-file
+.tree-item-self {
+	padding-left: 10px;
+}
+
+
+
+
+
+
+

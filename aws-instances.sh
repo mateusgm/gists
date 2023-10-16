@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ec2() {    
-  aws-vault exec app-$1-vault -- aws ec2 describe-instances | python3 ec2.py
+  aws-vault exec app-$1-vault -- aws ec2 describe-instances --output text --query "Reservations[*].Instances[*].[[InstanceId,InstanceType,Tags[?Key=='Name']|[0].Value]]"
 }
 
 rds() {
