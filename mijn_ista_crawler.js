@@ -43,7 +43,7 @@ function crawl(start, stop, interval) {
 	}
 
 	var params = {
-		"JWT": JWT,
+		"JWT": JSON.parse(sessionStorage.uBase).JWT,
 		"LANG": "en-US",
 		"Cuid": "f8842752-89d7-4801-95ee-2994feaacf14",
 		"Billingperiod":  {
@@ -63,7 +63,6 @@ function crawl(start, stop, interval) {
 var url = 'https://mijn.ista.nl/api/Values/ConsumptionValues';
 
 var start = new Date(2023,10,26,2).add({ days: -7*3 }),
-	stop = new Date(),
-    JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJZanhFaGNLdTVmeDhjTEh6SkVkclY3dUdEUlpMTStEZjhvWVB0QlpqdkNVL0NmL2lyRERuKzRQYzRPMlhZOE1iIiwibmJmIjoxNzAxMjQzNTIwLCJleHAiOjE3MDEyNDQ3MjAsImlhdCI6MTcwMTI0MzUyMCwiaXNzIjoiaHR0cHM6Ly9taWpuLmlzdGEubmwifQ.H-7yUUUWRIXYikVUwRo5S8WCL2QpWq0RI52GcrFEQrE';
+	stop = new Date();
 
 crawl(start, stop, 'week')
