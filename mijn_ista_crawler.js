@@ -29,7 +29,6 @@ Date.prototype.add = function(value) {
 };
 
 
-
 function crawl(start, stop, interval) {
 	var end;
 
@@ -44,8 +43,8 @@ function crawl(start, stop, interval) {
 
 	var params = {
 		"JWT": JSON.parse(sessionStorage.uBase).JWT,
+		"Cuid": JSON.parse(sessionStorage.uBase).Cus[0].Cuid,
 		"LANG": "en-US",
-		"Cuid": "f8842752-89d7-4801-95ee-2994feaacf14",
 		"Billingperiod":  {
 			y: start.add({ months: 6 }).getFullYear() +'',
 			s: start.ftime(),
