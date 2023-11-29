@@ -55,16 +55,14 @@ function crawl(start, stop, interval) {
 
 	$.postJSON(url, params, function(data) { 
 		console.log(start.fdate(), data.ServicesComp[0].TotalNow);
-		results[start.fdate()] = data.ServicesComp[0].TotalNow;
-
-		if(start < stop) crawl(start, stop, interval);
+		if(start < stop)
+			crawl(start, stop, interval);
 	})
 }
 
 var url = 'https://mijn.ista.nl/api/Values/ConsumptionValues';
 
-var results = {},
-	start = new Date(2023,10,26,2).add({ days: -7*3 }),
+var start = new Date(2023,10,26,2).add({ days: -7*3 }),
 	stop = new Date(),
     JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJZanhFaGNLdTVmeDhjTEh6SkVkclY3dUdEUlpMTStEZjhvWVB0QlpqdkNVL0NmL2lyRERuKzRQYzRPMlhZOE1iIiwibmJmIjoxNzAxMjQzNTIwLCJleHAiOjE3MDEyNDQ3MjAsImlhdCI6MTcwMTI0MzUyMCwiaXNzIjoiaHR0cHM6Ly9taWpuLmlzdGEubmwifQ.H-7yUUUWRIXYikVUwRo5S8WCL2QpWq0RI52GcrFEQrE';
 
