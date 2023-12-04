@@ -46,7 +46,12 @@ function crawl(start, end, stop, callback) {
     }
 
     $.postJSON(url, params, function(data) {
-        console.log(start.fdate(), data.ServicesComp[0].TotalNow);
+        var meters = data.ServicesComp[0];
+        var consumption = [meters.TotalNow, 0, 0, 0, 0, 0];
+        for (i in meters.CurMeters)
+            consumption[meters.CurMeters[i].RadNr]  += meters.CurMeters[i].CCDValue;
+
+        console.log(start.fdate(), consumption.join(' '));
         callback(start, stop);
     })
 }
@@ -58,11 +63,13 @@ function weekly(start, stop) {
 }
 
 function monthly(start, stop) {
-    var    start = start.add({ months: 1 });
+    var start = start.add({ months: 1 });
         end   = start.add({ months: 1, days: -1 });
     crawl(start, end, stop, monthly);
 }
 
 var stop = new Date().add({ days: -1 });
-weekly( new Date(2023,10,5,2), stop);
+weekly( new Date(2023,10,12,2), stop);
+
 // monthly( new Date(2023,9,1,2) , stop);
+
