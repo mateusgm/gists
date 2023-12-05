@@ -1,4 +1,6 @@
 
+// helpers
+
 $.postJSON = function(url, data, callback) {
     return jQuery.ajax({
         headers: {
@@ -12,6 +14,10 @@ $.postJSON = function(url, data, callback) {
         'success': callback
     });
 };
+
+Date.sparse = function(st) {
+     return Date.parse(st.replace(/(\d{2})-(\d{2})-(\d{4})/, '$3-$2-$1'));
+}
 
 Date.prototype.ftime = function() {
     return this.toISOString().slice(0,19);
@@ -27,6 +33,9 @@ Date.prototype.add = function(value) {
     date.setDate(date.getDate() + (value.days || 0));
     return date;
 };
+
+
+// bot
 
 function crawl(start, end, stop, callback) {
     if(start >= stop)
@@ -47,9 +56,10 @@ function crawl(start, end, stop, callback) {
 
     $.postJSON(url, params, function(data) {
         var meters = data.ServicesComp[0];
-        var consumption = [meters.TotalNow, 0, 0, 0, 0, 0];
+        var days = 1 + ( Date.sparse(data.CurEnd) - Date.sparse(data.CurStart) )  / (1000 * 60 * 60 * 24);
+        var consumption = [ +(meters.TotalNow / days).toFixed(1),  meters.TotalNow, 0, 0, 0, 0, 0];
         for (i in meters.CurMeters)
-            consumption[meters.CurMeters[i].RadNr]  += meters.CurMeters[i].CCDValue;
+            consumption[meters.CurMeters[i].RadNr+1]  += meters.CurMeters[i].CCDValue;
 
         console.log(start.fdate(), consumption.join(' '));
         callback(start, stop);
@@ -71,5 +81,5 @@ function monthly(start, stop) {
 var stop = new Date().add({ days: -1 });
 weekly( new Date(2023,10,12,2), stop);
 
-// monthly( new Date(2023,9,1,2) , stop);
+// monthly( new Date(2023,8,1,2) , stop);
 
