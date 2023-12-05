@@ -16,7 +16,7 @@ $.postJSON = function(url, data, callback) {
 };
 
 Date.sparse = function(st) {
-     return Date.parse(st.replace(/(\d{2})-(\d{2})-(\d{4})/, '$3-$2-$1'));
+     return new Date(Date.parse(st.replace(/(\d{2})-(\d{2})-(\d{4})/, '$3-$2-$1')));
 }
 
 Date.prototype.ftime = function() {
@@ -78,7 +78,7 @@ function monthly(start, stop) {
     crawl(start, end, stop, monthly);
 }
 
-var stop = new Date().add({ days: -1 });
+var stop = Date.sparse(JSON.parse(sessionStorage.uBase).Cus[0].curConsumption.CurEnd);
 weekly( new Date(2023,10,12,2), stop);
 
 // monthly( new Date(2023,8,1,2) , stop);
