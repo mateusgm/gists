@@ -9,13 +9,14 @@
 // @grant        none
 // ==/UserScript==
 
-$(function() {
+(function() {
     'use strict';
 
     var API_KEY     = '<API_KEY>';
     var DESTINATION = 'Stationsplein 11 L, 2011 LR Haarlem';
     var MODE        = 'WALKING'; //'TRANSIT';  // DRIVING WALKING BICYCLING
     var MAP_DELAY   = 1000;
+    var VERBOSE     = false;
 
     // auxiliar functions
 
@@ -38,7 +39,8 @@ $(function() {
                 return callback(response, status);
 
             _sleep(MAP_DELAY * Math.pow(2, retrial)).then(function() {
-                console.log('- Retrying ', origin, ' after ', MAP_DELAY * Math.pow(2, retrial));
+                if( VERBOSE )
+                    console.log('- Retrying ', origin, ' after ', MAP_DELAY * Math.pow(2, retrial));
                 _getDirection(origin, destination, mode, callback, retrial+1);
             });
         });
@@ -46,26 +48,24 @@ $(function() {
 
     var _updateInfo = function(element, info) {
         var span   = $('<span/>').attr('style', 'color: red;').text("  |  " + info);
-        var position = $('.search-result-content-inner', element);
-        if(position.length === 0) position = element.closest('.search-result-content-inner');
-        if(position.length === 0) position = element.parent();
-        $('.search-result-info:first, .object-header__address-city', position).append(span);
+        $(element).append(span);
     };
 
 
     // crawling
 
     var populateDistances = function() {
-        $('.search-result-title, .object-header__address').each(function(i, e) {
+        jQuery('*[data-test-id="street-name-house-number"]').each(function(i, e) {
             var _this = $(this);
             var from  = $.trim( _this.text() ).replace(/\s{2,}/g, ", ");
 
             _getDirection(from, DESTINATION, MODE, function(response, status) {
                 if( response === null ) return;
                 var point = response.routes[ 0 ].legs[ 0 ];
-                console.log("Found distance:", point);
-                _updateInfo( _this.parent(), point.distance.text );
-                _updateInfo( _this.parent(), point.duration.text );
+                if( VERBOSE )
+                    console.log("Found distance:", from, point);
+                _updateInfo( _this, point.distance.text );
+                _updateInfo( _this, point.duration.text );
             });
         });
     };
@@ -91,9 +91,12 @@ $(function() {
         _sleep(1000).then(window.crawlResults);
     };
 
-    if(API_KEY) {
+
+    function loadLibrary(API_KEY, spec) {
         var map = document.createElement('script');
-        map.src = "https://maps.googleapis.com/maps/api/js?callback=crawlResults&key=" + API_KEY;
+        map.src = "https://maps.googleapis.com/maps/api/js?key=" + API_KEY + "&callback=" + spec;
         document.getElementsByTagName('head')[0].appendChild(map);
     }
-});
+
+    loadLibrary(API_KEY, 'crawlResults');
+})();
